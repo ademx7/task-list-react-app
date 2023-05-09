@@ -1,11 +1,9 @@
 import Task from "./Task";
-
-
-function TaskList() {
-    const list = [
-        { text: "Estudiar React" },
-        { text: "Hacer las compras" },
-      ];
+function TaskList(list) {
+    list = [
+        {text: "Estudiar React"},
+        {text: "Hacer la app de tareas"}
+    ];
     return (
        <div>
             <h2>Tareas:</h2>
@@ -18,5 +16,4 @@ function TaskList() {
        </div>
     );
   }
-
   export default TaskList;

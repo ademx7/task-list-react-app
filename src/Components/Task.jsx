@@ -1,5 +1,5 @@
-function Task (props) {
-    // eslint-disable-next-line react/prop-types
+function Task(props) {
+
     const  {text}  = props;
     return (
 
