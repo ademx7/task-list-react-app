@@ -14,20 +14,27 @@ function TaskList() {
   }, []);
 
   const handleTaskCompletion = (index) => {
-    const updatedTaskList = [...taskList];
-    updatedTaskList[index].completed = !updatedTaskList[index].completed;
+    const updatedTaskList = taskList.map((task, taskIndex) => {
+      if (taskIndex === index) {
+        return {
+          ...task,
+          completed: !task.completed
+        };
+      }
+      return task;
+    });
     setTaskList(updatedTaskList);
-    updateLocalStorage(updatedTaskList);
+    localStorage.setItem("tasks", JSON.stringify(updatedTaskList));
   };
-
+  
   const handleInputChange = (event) => {
     setNewTaskText(event.target.value);
   };
-
+  
   const handleCommentChange = (event) => {
     setNewTaskComment(event.target.value);
   };
-
+  
   const handleAddTask = () => {
     if (newTaskText.trim() !== "") {
       const newTask = {
@@ -35,22 +42,22 @@ function TaskList() {
         completed: false,
         comment: newTaskComment
       };
-      setTaskList([...taskList, newTask]);
+      setTaskList((prevTaskList) => [...prevTaskList, newTask]);
       setNewTaskText("");
       setNewTaskComment("");
-      updateLocalStorage([...taskList, newTask]);
+      localStorage.setItem(
+        "tasks",
+        JSON.stringify([...taskList, newTask])
+      );
     }
   };
-
+  
   const handleDeleteTask = (index) => {
     const updatedTaskList = taskList.filter((_, taskIndex) => taskIndex !== index);
     setTaskList(updatedTaskList);
-    updateLocalStorage(updatedTaskList);
-  };
-
-  const updateLocalStorage = (updatedTaskList) => {
     localStorage.setItem("tasks", JSON.stringify(updatedTaskList));
   };
+  
 
   return (
     <div>
