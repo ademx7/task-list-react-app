@@ -1,7 +1,6 @@
 function Header() {
   return (
-      <h1>Task List</h1>
+      <h1>My To-do App</h1>
   );
 }
-
 export default Header;

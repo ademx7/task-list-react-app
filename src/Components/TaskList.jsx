@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Task from "./Task";
+import Btn from "./Btn"
 
 function TaskList() {
   const [taskList, setTaskList] = useState([]);
@@ -13,7 +14,7 @@ function TaskList() {
     }
   }, []);
 
-  const handleTaskCompletion = (index) => {
+  const handleTaskCompletion = function (index) {
     const updatedTaskList = taskList.map((task, taskIndex) => {
       if (taskIndex === index) {
         return {
@@ -75,9 +76,8 @@ function TaskList() {
           onChange={handleCommentChange}
           placeholder="Descripción o comentario (Opcional)"
         />
-        <button onClick={handleAddTask}>Agregar tarea</button>
+        <Btn onClick={handleAddTask}>Agregar tarea</Btn>
      </div>
-      <ul>
         {taskList.map((item, index) => (
           <Task
             key={index}
@@ -88,7 +88,6 @@ function TaskList() {
             onDelete={() => handleDeleteTask(index)}
           />
         ))}
-      </ul>
     </div>
   );
 }
