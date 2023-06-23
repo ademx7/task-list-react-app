@@ -1,64 +1,42 @@
-import { useState, useEffect } from "react";
+import useTaskManagement from "../Hooks/useTaskManagment";
 import Task from "./Task";
-import Btn from "./Btn"
+import Btn from "./Btn";
 
 function TaskList() {
-  const [taskList, setTaskList] = useState([]);
-  const [newTaskText, setNewTaskText] = useState("");
-  const [newTaskComment, setNewTaskComment] = useState("");
+  const {
+    taskList,
+    newTaskText,
+    newTaskComment,
+    setNewTaskText,
+    setNewTaskComment,
+    createTask,
+    deleteTask,
+    updateTask
+  } = useTaskManagement();
 
-  useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-    if (storedTasks) {
-      setTaskList(JSON.parse(storedTasks));
-    }
-  }, []);
-
-  const handleTaskCompletion = function (index) {
-    const updatedTaskList = taskList.map((task, taskIndex) => {
-      if (taskIndex === index) {
-        return {
-          ...task,
-          completed: !task.completed
-        };
-      }
-      return task;
-    });
-    setTaskList(updatedTaskList);
-    localStorage.setItem("tasks", JSON.stringify(updatedTaskList));
+  const handleTaskCompletion = (index) => {
+    const updatedTask = {
+      ...taskList[index],
+      completed: !taskList[index].completed
+    };
+    updateTask(index, updatedTask);
   };
-  
+
   const handleInputChange = (event) => {
     setNewTaskText(event.target.value);
   };
-  
+
   const handleCommentChange = (event) => {
     setNewTaskComment(event.target.value);
   };
-  
+
   const handleAddTask = () => {
-    if (newTaskText.trim() !== "") {
-      const newTask = {
-        text: newTaskText,
-        completed: false,
-        comment: newTaskComment
-      };
-      setTaskList((prevTaskList) => [...prevTaskList, newTask]);
-      setNewTaskText("");
-      setNewTaskComment("");
-      localStorage.setItem(
-        "tasks",
-        JSON.stringify([...taskList, newTask])
-      );
-    }
+    createTask();
   };
-  
+
   const handleDeleteTask = (index) => {
-    const updatedTaskList = taskList.filter((_, taskIndex) => taskIndex !== index);
-    setTaskList(updatedTaskList);
-    localStorage.setItem("tasks", JSON.stringify(updatedTaskList));
+    deleteTask(index);
   };
-  
 
   return (
     <div>
@@ -77,17 +55,17 @@ function TaskList() {
           placeholder="Descripción o comentario (Opcional)"
         />
         <Btn onClick={handleAddTask}>Agregar tarea</Btn>
-     </div>
-        {taskList.map((item, index) => (
-          <Task
-            key={index}
-            text={item.text}
-            completed={item.completed}
-            comment={item.comment}
-            onCompletion={() => handleTaskCompletion(index)}
-            onDelete={() => handleDeleteTask(index)}
-          />
-        ))}
+      </div>
+      {taskList.map((item, index) => (
+        <Task
+          key={index}
+          text={item.text}
+          completed={item.completed}
+          comment={item.comment}
+          onCompletion={() => handleTaskCompletion(index)}
+          onDelete={() => handleDeleteTask(index)}
+        />
+      ))}
     </div>
   );
 }
